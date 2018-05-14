@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <import resource="spring-dao.xml"/>
+    <context:component-scan base-package="com.dealsky"/>
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <property name="loginUrl" value="login.html"/>
+        <property name="unauthorizedUrl" value="403.html"/>
+        <property name="filterChainDefinitions">
+            <value>
+                /login.html = anon
+                /subLogin = anon
+                /testRole/admin = rolesOr["admin", "leader"]
+                /* = authc
+            </value>
+        </property>
+        <property name="filters">
+            <util:map>
+                <entry key="rolesOr" value-ref="rolesOrFilter"/>
+            </util:map>
+        </property>
+    </bean>
+
+    <bean class="com.dealsky.filter.RolesOrFilter" id="rolesOrFilter"/>
+
+    <!--创建SecurityMananger对象-->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <!--设置自定义Realm-->
+        <property name="realm" ref="realm"/>
+    </bean>
+
+    <!--定义自定义的Realm-->
+    <bean id="realm" class="com.dealsky.shiro.realm.CustomRealm">
+        <property name="credentialsMatcher" ref="credentialsMatcher"/>
+    </bean>
+
+    <!--设置加密的算法-->
+    <bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher"
+          id="credentialsMatcher">
+        <property name="hashAlgorithmName" value="md5"/>
+        <property name="hashIterations" value="1"/>
+    </bean>
+</beans>
