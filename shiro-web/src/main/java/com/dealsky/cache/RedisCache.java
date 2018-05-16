@@ -27,6 +27,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
 
     @Override
     public V get(K k) throws CacheException {
+        System.out.println("从redis中获取权限数据");
         byte[] value = getKey(k);
         if (value != null) {
             return (V) jedisUtil.get(getKey(k));
