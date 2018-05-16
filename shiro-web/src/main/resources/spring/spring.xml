@@ -35,6 +35,8 @@
         <property name="realm" ref="realm"/>
         <!--配置SessionManager-->
         <property name="sessionManager" ref="sessionManager"/>
+        <!--配置CacheManager-->
+        <property name="cacheManager" ref="cacheManager"/>
     </bean>
 
     <!--定义自定义的Realm-->
@@ -56,4 +58,6 @@
     </bean>
 
     <bean class="com.dealsky.session.RedisSessionDao" id="redisSessionDao"/>
+
+    <bean class="com.dealsky.cache.RedisCacheManager" id="cacheManager"/>
 </beans>

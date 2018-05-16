@@ -3,13 +3,14 @@ package com.dealsky.cache;
 import com.dealsky.util.JedisUtil;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
+import org.springframework.stereotype.Component;
 import org.springframework.util.SerializationUtils;
 
 import javax.annotation.Resource;
 import java.util.Collection;
 import java.util.Set;
 
-
+@Component
 public class RedisCache<K, V> implements Cache<K, V> {
 
     @Resource
