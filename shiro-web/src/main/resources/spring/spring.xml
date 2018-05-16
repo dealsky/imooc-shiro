@@ -6,6 +6,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
     <import resource="spring-dao.xml"/>
+    <import resource="spring-redis.xml"/>
     <context:component-scan base-package="com.dealsky"/>
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager"/>
@@ -32,6 +33,8 @@
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <!--设置自定义Realm-->
         <property name="realm" ref="realm"/>
+        <!--配置SessionManager-->
+        <property name="sessionManager" ref="sessionManager"/>
     </bean>
 
     <!--定义自定义的Realm-->
@@ -45,4 +48,12 @@
         <property name="hashAlgorithmName" value="md5"/>
         <property name="hashIterations" value="1"/>
     </bean>
+
+    <!--SessionManager对象-->
+
+    <bean class="com.dealsky.session.CustomSessionManager" id="sessionManager">
+        <property name="sessionDAO" ref="redisSessionDao"/>
+    </bean>
+
+    <bean class="com.dealsky.session.RedisSessionDao" id="redisSessionDao"/>
 </beans>
